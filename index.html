@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my todo list</title>
+    <script src="script.js"></script>
+    <style>
+        /* Umum */
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ebd7f3;
+            color: #333;
+        }
+
+        header {
+            background-color: #ffffff; /* Warna biru yang lebih formal */
+            color: rgb(0, 0, 0);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin: 0;
+        }
+
+        /* Kontainer utama */
+        .container {
+            max-width: 300px;
+            margin: 10px auto;
+            background: rgb(230, 193, 193);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.6em;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .form-group button {
+            background-color: #0056b3; /* Warna biru yang lebih gelap */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .form-group button:hover {
+            background-color: #003366;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .book-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .book-list li {
+            background-color: #f1f1f1;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .borrow-section {
+            margin-top: 20px;
+        }
+
+        .borrow-section select {
+            width: calc(10% - 24px);
+            padding: 10px;
+            font-size: 1em;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .borrow-section button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Media Queries untuk Responsif di Perangkat Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                width: 95%;
+            }
+
+            .form-group input, .form-group select, .form-group textarea, .form-group button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>My Todo List</h1>
+    </header>
+
+    <div class="container">
+        <h2>Login</h2>
+        <div id="login-section">
+            <div class="form-group">
+                <label for="role">Login Sebagai:</label>
+                <select id="role">
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password">
+            </div>
+            <div class="form-group">
+                <button onclick="login()">Login</button>
+            </div>
+        </div>
+
+        <div id="admin-section" class="hidden">
+            <h2>Admin Panel</h2>
+            <p></p>
+            <ul id="book-list" class="book-list"></ul>
+            <button onclick="logout()">Logout</button>
+        </div>
+
+        <div id="user-section" class="hidden">
+            <h2>Pengumpulan tugas</h2>
+            <div class="form-group">
+                <label for="book-title">tugas apa yang di kirim:</label>
+                <input type="text" id="book-title" placeholder="Judul Buku">
+            </div>
+            <div class="form-group">
+                <label for="book-genre">Nama guru:</label>
+                <input type="text" id="book-genre" placeholder="Jenis Buku">
+            </div>
+            <div class="form-group">
+                <button onclick="addBook()">Kategori </button>
+            </div>
+            <ul id="available-books" class="book-list"></ul>
+            <div class="borrow-section">
+                <label for="selected-book">P</label>
+                <select id="selected-book"></select>
+                <button onclick="borrowBook()">Pinjam Buku</button>
+            </div>
+            <div class="form-group">
+                <label for="borrow-date">Tanggal Pengumpulan:</label>
+                <input type="date" id="borrow-date">
+            </div>
+            <div class="form-group">
+                <label for="return-date">Tanggal Pengecekan:</label>
+                <input type="date" id="return-date">
+            </div>
+            <div class="form-group">
+                <label for="review">Tulis Ulasan:</label>
+                <textarea id="review" placeholder="Tulis ulasan Anda di sini"></textarea>
+            </div>
+            <div class="form-group">
+                <button onclick="submitReview()">Kirim Ulasan</button>
+            </div>
+            <div id="reviews"></div>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        const loginSection = document.getElementById("login-section");
+        const adminSection = document.getElementById("admin-section");
+        const userSection = document.getElementById("user-section");
+        const bookList = document.getElementById("book-list");
+        const availableBooks = document.getElementById("available-books");
+        const selectedBook = document.getElementById("selected-book");
+        const reviews = document.getElementById("reviews");
+
+        const books = [];
+
+        function login() {
+            const role = document.getElementById("role").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "admin" && role === "admin") {
+                loginSection.classList.add("hidden");
+                adminSection.classList.remove("hidden");
+            } else if (username === "user" && password === "user" && role === "user") {
+                loginSection.classList.add("hidden");
+                userSection.classList.remove("hidden");
+                renderBooks();
+            } else {
+                alert("Login gagal. Periksa username dan password.");
+            }
+        }
