@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my todo list</title>
-    <script src="script.js"></script>
+    <title>My Todo List</title>
     <style>
+        
         /* Umum */
         body {
             font-family: 'Helvetica', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #ebd7f3;
+            background-color: #f9f9f9;
             color: #333;
         }
 
@@ -30,16 +30,16 @@
 
         /* Kontainer utama */
         .container {
-            max-width: 300px;
+            max-width: 600px;
             margin: 10px auto;
-            background: rgb(230, 193, 193);
+            background: rgb(173, 117, 117);
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
         }
 
         h2 {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             color: #333;
             font-size: 1.6em;
             font-weight: 600;
@@ -105,7 +105,7 @@
         }
 
         .borrow-section select {
-            width: calc(10% - 24px);
+            width: calc(100% - 24px);
             padding: 10px;
             font-size: 1em;
             margin-right: 10px;
@@ -131,6 +131,7 @@
     </style>
 </head>
 <body>
+    
 
     <header>
         <h1>My Todo List</h1>
@@ -140,7 +141,7 @@
         <h2>Login</h2>
         <div id="login-section">
             <div class="form-group">
-                <label for="role">Login Sebagai:</label>
+                <label for="role">Register:</label>
                 <select id="role">
                     <option value="admin">Admin</option>
                     <option value="user">User</option>
@@ -158,39 +159,38 @@
                 <button onclick="login()">Login</button>
             </div>
         </div>
-
         <div id="admin-section" class="hidden">
-            <h2>Admin Panel</h2>
-            <p></p>
+            <h2>dashboard</h2>
+            <p>.</p>
             <ul id="book-list" class="book-list"></ul>
             <button onclick="logout()">Logout</button>
         </div>
 
         <div id="user-section" class="hidden">
-            <h2>Pengumpulan tugas</h2>
+            <h2>category</h2>
             <div class="form-group">
-                <label for="book-title">tugas apa yang di kirim:</label>
+                <label for="book-title">ID:</label>
                 <input type="text" id="book-title" placeholder="Judul Buku">
             </div>
             <div class="form-group">
-                <label for="book-genre">Nama guru:</label>
+                <label for="book-genre">Category buku:</label>
                 <input type="text" id="book-genre" placeholder="Jenis Buku">
             </div>
             <div class="form-group">
-                <button onclick="addBook()">Kategori </button>
+                <button onclick="addBook()">ID Buku:</button>
             </div>
             <ul id="available-books" class="book-list"></ul>
             <div class="borrow-section">
-                <label for="selected-book">P</label>
+                <label for="selected-book">Pilih Buku yang Ingin Dipinjam:</label>
                 <select id="selected-book"></select>
-                <button onclick="borrowBook()">Pinjam Buku</button>
+                <button onclick="borrowBook()">:</button>
             </div>
             <div class="form-group">
-                <label for="borrow-date">Tanggal Pengumpulan:</label>
+                <label for="borrow-date">User_ID:</label>
                 <input type="date" id="borrow-date">
             </div>
             <div class="form-group">
-                <label for="return-date">Tanggal Pengecekan:</label>
+                <label for="return-date">AKSI:</label>
                 <input type="date" id="return-date">
             </div>
             <div class="form-group">
@@ -232,3 +232,79 @@
                 alert("Login gagal. Periksa username dan password.");
             }
         }
+
+        function logout() {
+            loginSection.classList.remove("hidden");
+            adminSection.classList.add("hidden");
+            userSection.classList.add("hidden");
+        }
+
+        function addBook() {
+            const bookTitle = document.getElementById("book-title").value;
+            const bookGenre = document.getElementById("book-genre").value;
+            if (bookTitle && bookGenre) {
+                books.push({ title: bookTitle, genre: bookGenre });
+                renderBooks();
+                document.getElementById("book-title").value = "";
+                document.getElementById("book-genre").value = "";
+            }
+        }
+
+        function renderBooks() {
+            bookList.innerHTML = "";
+            availableBooks.innerHTML = "";
+            selectedBook.innerHTML = "";
+
+            books.forEach((book, index) => {
+                const li = document.createElement("li");
+                li.textContent = `${book.title} - ${book.genre}`;
+                bookList.appendChild(li);
+
+                const liUser = document.createElement("li");
+                liUser.textContent = `${book.title} - ${book.genre}`;
+                availableBooks.appendChild(liUser);
+
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = `${book.title} - ${book.genre}`;
+                selectedBook.appendChild(option);
+            });
+        }
+
+        function borrowBook() {
+            const selectedIndex = selectedBook.value;
+            if (selectedIndex !== "") {
+                const book = books[selectedIndex];
+                alert(`Anda memilih untuk meminjam buku: ${book.title} - ${book.genre}`);
+            } else {
+                alert("Pilih buku terlebih dahulu.");
+            }
+        }
+
+        function submitReview() {
+            const reviewText = document.getElementById("review").value;
+            const borrowDate = document.getElementById("borrow-date").value;
+            const returnDate = document.getElementById("return-date").value;
+
+            if (reviewText && borrowDate && returnDate) {
+                const reviewDiv = document.createElement("div");
+                reviewDiv.textContent = `Ulasan: ${reviewText} | Tanggal Peminjaman: ${borrowDate} | Tanggal Pengembalian: ${returnDate}`;
+                reviews.appendChild(reviewDiv);
+                document.getElementById("review").value = "";
+                document.getElementById("borrow-date").value = "";
+                document.getElementById("return-date").value = "";
+                alert("Ulasan berhasil dikirim.");
+            } else {
+                alert("Harap lengkapi semua data sebelum mengirim ulasan.");
+            }
+        }
+    </script>    
+</body>
+</html>
+
+
+        
+
+
+
+
