@@ -1,310 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Todo List</title>
-    <style>
-        
-        /* Umum */
-        body {
-            font-family: 'Helvetica', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-
-        header {
-            background-color: #ffffff; /* Warna biru yang lebih formal */
-            color: rgb(0, 0, 0);
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            font-size: 2em;
-            margin: 0;
-        }
-
-        /* Kontainer utama */
-        .container {
-            max-width: 600px;
-            margin: 10px auto;
-            background: rgb(173, 117, 117);
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-
-        h2 {
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 1.6em;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        .form-group textarea {
-            height: 120px;
-            resize: none;
-        }
-
-        .form-group button {
-            background-color: #0056b3; /* Warna biru yang lebih gelap */
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 1.1em;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-
-        .form-group button:hover {
-            background-color: #003366;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .book-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .book-list li {
-            background-color: #f1f1f1;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-
-        .borrow-section {
-            margin-top: 20px;
-        }
-
-        .borrow-section select {
-            width: calc(100% - 24px);
-            padding: 10px;
-            font-size: 1em;
-            margin-right: 10px;
-            display: inline-block;
-        }
-
-        .borrow-section button {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        /* Media Queries untuk Responsif di Perangkat Mobile */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-                width: 95%;
-            }
-
-            .form-group input, .form-group select, .form-group textarea, .form-group button {
-                font-size: 1em;
-            }
-        }
-    </style>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </head>
-<body>
-    
-
-    <header>
-        <h1>My Todo List</h1>
-    </header>
-
-    <div class="container">
-        <h2>Login</h2>
-        <div id="login-section">
-            <div class="form-group">
-                <label for="role">Register:</label>
-                <select id="role">
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username">
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password">
-            </div>
-            <div class="form-group">
-                <button onclick="login()">Login</button>
-            </div>
-        </div>
-        <div id="admin-section" class="hidden">
-            <h2>dashboard</h2>
-            <p>.</p>
-            <ul id="book-list" class="book-list"></ul>
-            <button onclick="logout()">Logout</button>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white p-5">
+            <h2 class="text-2xl font-bold mb-6">dashboard</h2>
+            <ul>
+                <li class="mb-4"><a href="#" class="hover:underline flex items-center" onclick="showSection('category')"><i class="fas fa-home mr-2"></i> Dashboard</a></li>
+                <li class="mb-4"><a href="#" class="hover:underline flex items-center" onclick="showSection('category')"><i class="fas fa-book mr-2"></i> Kategori Buku</a></li>
+                <li class="mb-4"><a href="#" class="hover:underline flex items-center" onclick="showSection('addBook')"><i class="fas fa-plus-circle mr-2"></i> Tambah Tugas</a></li>
+                <li class="mb-4"><a href="#" class="hover:underline flex items-center" onclick="showSection('register')"><i class="fas fa-user-plus mr-2"></i> Registrasi</a></li>
+                <li class="mb-4"><a href="#" class="hover:underline flex items-center" onclick="showSection('login')"><i class="fas fa-sign-in-alt mr-2"></i> Login</a></li>
+                <li class="mt-6 text-red-400"><a href="#" onclick="logout()" class="flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a></li>
+            </ul>
         </div>
 
-        <div id="user-section" class="hidden">
-            <h2>category</h2>
-            <div class="form-group">
-                <label for="book-title">ID:</label>
-                <input type="text" id="book-title" placeholder="Judul Buku">
+        <!-- Content -->
+        <div class="flex-1 p-10" id="content">
+            <div id="register" class="section hidden">
+                <h2 class="text-xl font-bold mb-4">Registrasi</h2>
+                <input type="text" id="regUsername" placeholder="Username" class="w-full p-2 mb-2 border rounded">
+                <input type="password" id="regPassword" placeholder="Password" class="w-full p-2 mb-2 border rounded">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="registerUser()">Daftar</button>
             </div>
-            <div class="form-group">
-                <label for="book-genre">Category buku:</label>
-                <input type="text" id="book-genre" placeholder="Jenis Buku">
+            
+            <div id="login" class="section hidden">
+                <h2 class="text-xl font-bold mb-4">Login</h2>
+                <input type="text" id="loginUsername" placeholder="Username" class="w-full p-2 mb-2 border rounded">
+                <input type="password" id="loginPassword" placeholder="Password" class="w-full p-2 mb-2 border rounded">
+                <button class="bg-green-500 text-white px-4 py-2 rounded" onclick="loginUser()">Login</button>
+                <p id="loginError" class="text-red-500 hidden mt-2">Username atau password salah!</p>
             </div>
-            <div class="form-group">
-                <button onclick="addBook()">ID Buku:</button>
+            
+            <div id="category" class="section">
+                <h2 class="text-xl font-bold mb-4">Tambah Data Buku</h2>
+                <input type="text" id="searchBook" placeholder="Cari buku..." class="w-full p-2 mb-4 border rounded" onkeyup="searchBook()">
+                <table class="w-full bg-white shadow-md rounded-lg">
+                    <thead>
+                        <tr class="bg-blue-500 text-black">
+                            <th class="p-2">ID:</th>
+                            <th class="p-2">119</th>
+                            <th class="p-2">User ID:</th>
+                            <th class="p-2">0009112</th>
+                            <th class="p-2">Judul Buku:</th>
+                            <th class="p-2">Matematika:</th>
+                            <th class="p-2"><div class="w-34 bg-red-800 text-white p-3">Tambahkan</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr class="bg-white-500 text-black">
+                            <th class="p-2">ID:</th>
+                            <th class="p-2">119</th>
+                            <th class="p-2">User ID:</th>
+                            <th class="p-2">009112</th>
+                            <th class="p-2">Judul Buku:</th>
+                            <th class="p-2">Bahasa indonesia</th>
+                            <th class="p-2"><div class="w-34 bg-green-800 text-white p-3">Hapus</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr class="bg-blue-500 text-black">
+                            <th class="p-2">ID:</th>
+                            <th class="p-2">119</th>
+                            <th class="p-2">User ID:</th>
+                            <th class="p-2">109112</th>
+                            <th class="p-2">Judul Buku:</th>
+                            <th class="p-2">Bahasa inggris
+                            <th class="p-2"><div class="w-34 bg-red-800 text-white p-3">Tambahkan</th>
+                            </thead>
+                    <tbody id="bookTable"></tbody>
+                </table>
             </div>
-            <ul id="available-books" class="book-list"></ul>
-            <div class="borrow-section">
-                <label for="selected-book">Pilih Buku yang Ingin Dipinjam:</label>
-                <select id="selected-book"></select>
-                <button onclick="borrowBook()">:</button>
-            </div>
-            <div class="form-group">
-                <label for="borrow-date">User_ID:</label>
-                <input type="date" id="borrow-date">
-            </div>
-            <div class="form-group">
-                <label for="return-date">AKSI:</label>
-                <input type="date" id="return-date">
-            </div>
-            <div class="form-group">
-                <label for="review">Tulis Ulasan:</label>
-                <textarea id="review" placeholder="Tulis ulasan Anda di sini"></textarea>
-            </div>
-            <div class="form-group">
-                <button onclick="submitReview()">Kirim Ulasan</button>
-            </div>
-            <div id="reviews"></div>
-            <button onclick="logout()">Logout</button>
         </div>
     </div>
+    <div id="add task" clas="section">
+        <h2 class="text-xl font-bold mb-4">Add Task</h2>
+        <input type="text" id="searchBook" placeholder="Add Task..." class="w-full p-2 mb-4 border rounded" onkeyup="searchBook()">
+        <table class="w-full bg-yellow shadow-md rounded-lg">
+        </div>
+        <thead>
+            <tr class="bg-pink-500 text-black">
+                <th class="p-2">nama siswa:</th>
+                <th class="p-2">119</th>
+                <th class="p-2">User ID:</th>
+                <th class="p-2">0009112</th>
+                <th class="p-2">Judul Buku:</th>
+                <th class="p-2">Matematika:</th>
+                <th class="p-2"><div class="w-34 bg-red-800 text-white p-3">Tambahkan</th>
+            </tr>
+        </thead>
+
 
     <script>
-        const loginSection = document.getElementById("login-section");
-        const adminSection = document.getElementById("admin-section");
-        const userSection = document.getElementById("user-section");
-        const bookList = document.getElementById("book-list");
-        const availableBooks = document.getElementById("available-books");
-        const selectedBook = document.getElementById("selected-book");
-        const reviews = document.getElementById("reviews");
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(section).classList.remove('hidden');
+        }
 
-        const books = [];
-
-        function login() {
-            const role = document.getElementById("role").value;
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            if (username === "admin" && password === "admin" && role === "admin") {
-                loginSection.classList.add("hidden");
-                adminSection.classList.remove("hidden");
-            } else if (username === "user" && password === "user" && role === "user") {
-                loginSection.classList.add("hidden");
-                userSection.classList.remove("hidden");
-                renderBooks();
-            } else {
-                alert("Login gagal. Periksa username dan password.");
+        function registerUser() {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let username = document.getElementById('regUsername').value;
+            let password = document.getElementById('regPassword').value;
+            
+            if (!username || !password) {
+                alert('Semua bidang harus diisi!');
+                return;
             }
+            
+            if (users.some(user => user.username === username)) {
+                alert('Username sudah digunakan!');
+                return;
+            }
+            
+            users.push({ username, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('Registrasi berhasil! Silakan login.');
+        }
+
+        function loginUser() {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let username = document.getElementById('loginUsername').value;
+            let password = document.getElementById('loginPassword').value;
+            let errorMsg = document.getElementById('loginError');
+            
+            let user = users.find(user => user.username === username && user.password === password);
+            
+            if (!user) {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            localStorage.setItem('loggedInUser', username);
+            alert('Login berhasil!');
+            window.location.reload();
         }
 
         function logout() {
-            loginSection.classList.remove("hidden");
-            adminSection.classList.add("hidden");
-            userSection.classList.add("hidden");
+            localStorage.removeItem('loggedInUser');
+            alert('Logout berhasil!');
+            window.location.reload();
         }
 
-        function addBook() {
-            const bookTitle = document.getElementById("book-title").value;
-            const bookGenre = document.getElementById("book-genre").value;
-            if (bookTitle && bookGenre) {
-                books.push({ title: bookTitle, genre: bookGenre });
-                renderBooks();
-                document.getElementById("book-title").value = "";
-                document.getElementById("book-genre").value = "";
-            }
-        }
-
-        function renderBooks() {
-            bookList.innerHTML = "";
-            availableBooks.innerHTML = "";
-            selectedBook.innerHTML = "";
-
-            books.forEach((book, index) => {
-                const li = document.createElement("li");
-                li.textContent = `${book.title} - ${book.genre}`;
-                bookList.appendChild(li);
-
-                const liUser = document.createElement("li");
-                liUser.textContent = `${book.title} - ${book.genre}`;
-                availableBooks.appendChild(liUser);
-
-                const option = document.createElement("option");
-                option.value = index;
-                option.textContent = `${book.title} - ${book.genre}`;
-                selectedBook.appendChild(option);
+        function searchBook() {
+            let input = document.getElementById('searchBook').value.toLowerCase();
+            let rows = document.querySelectorAll('#bookTable tr');
+            rows.forEach(row => {
+                let title = row.cells[2]?.innerText.toLowerCase();
+                row.style.display = title && title.includes(input) ? '' : 'none';
             });
         }
 
-        function borrowBook() {
-            const selectedIndex = selectedBook.value;
-            if (selectedIndex !== "") {
-                const book = books[selectedIndex];
-                alert(`Anda memilih untuk meminjam buku: ${book.title} - ${book.genre}`);
-            } else {
-                alert("Pilih buku terlebih dahulu.");
+        document.addEventListener('DOMContentLoaded', function () {
+            let loggedInUser = localStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                showSection('login');
             }
-        }
-
-        function submitReview() {
-            const reviewText = document.getElementById("review").value;
-            const borrowDate = document.getElementById("borrow-date").value;
-            const returnDate = document.getElementById("return-date").value;
-
-            if (reviewText && borrowDate && returnDate) {
-                const reviewDiv = document.createElement("div");
-                reviewDiv.textContent = `Ulasan: ${reviewText} | Tanggal Peminjaman: ${borrowDate} | Tanggal Pengembalian: ${returnDate}`;
-                reviews.appendChild(reviewDiv);
-                document.getElementById("review").value = "";
-                document.getElementById("borrow-date").value = "";
-                document.getElementById("return-date").value = "";
-                alert("Ulasan berhasil dikirim.");
-            } else {
-                alert("Harap lengkapi semua data sebelum mengirim ulasan.");
-            }
-        }
-    </script>    
+        });
+    </script>
 </body>
 </html>
-
-
-        
-
-
-
-
